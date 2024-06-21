@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const router = require('./Routes/router');
 const attendancedetails = require('./Models/attendanceModel');
-const totaldaysWorked = require('./Models/totaldaysModel')
 require('./DB/connection');
 const atteServer = express();
 
@@ -29,9 +28,9 @@ atteServer.get('/getattendanceModel', (req, res) => {
         });
 });
 
-atteServer.get('/gettotaldaysModel', (req, res) => {
-    totaldaysWorked.find()
-     .then(totaldaysModel => res.json(totaldaysModel))
-     .catch(err=> res.json(err))    
-})
+// atteServer.get('/gettotaldaysModel', (req, res) => {
+//     totaldaysWorked.find()
+//      .then(totaldaysModel => res.json(totaldaysModel))
+//      .catch(err=> res.json(err))    
+// })
 
