@@ -9,7 +9,7 @@ const atteServer = express();
 atteServer.use(cors());
 atteServer.use(express.json());
 atteServer.use(router);
-const PORT = 3000 || process.env.PORT
+const PORT = 3001 || process.env.PORT
 
 atteServer.listen(PORT, () => {
     console.log('Server started on port', PORT);

@@ -106,6 +106,25 @@ const logouti = async (req, res) => {
     }
 };
 
+const deleteUsers = async (req, res) => {
+    const { ids } = req.body;
+
+    try {
+        console.log(`Delete request received for user IDs: ${ids}`); // Log message for received delete request
+        res.status(200).json({ message: "Delete request received. Processing..." });
+
+        await userdetails.deleteMany({ _id: { $in: ids } });
+        await attendancedetails.deleteMany({ email: { $in: ids } });
+
+        // console.log(`Users with IDs: ${ids} have been deleted successfully.`); // Log message for successful deletion
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+
+
 
 
 // Helper function to parse time string (HH:MM:SS) to seconds
@@ -126,4 +145,4 @@ function formatTime(seconds) {
 }
 
 
-module.exports = { register, login, logouti ,adminlogin};
+module.exports = { register, login, logouti ,adminlogin, deleteUsers};
