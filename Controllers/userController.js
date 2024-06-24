@@ -53,7 +53,7 @@ const login = async (req, res) => {
         const day = String(currentDate.getDate()).padStart(2, '0');
         const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // getMonth() returns 0-based month
         const year = currentDate.getFullYear();
-        const currentLoginDate = `${day} ${month} ${year}`;
+        const currentLoginDate = `${day}-${month}-${year}`;
         console.log(currentLoginDate);
                 const existingAttendance = await attendancedetails.findOne({ email: email, loginDate: currentLoginDate });
 
