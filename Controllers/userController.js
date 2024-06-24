@@ -4,6 +4,15 @@ const attendancedetails = require('../Models/attendanceModel');
 const admindetails = require('../Models/adminModel')
 
 
+function formattedTodaysDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; // Adding 1 because January is 0
+    const day = today.getDate();
+    return `${day < 10 ? '0' : ''}${day}-${month < 10 ? '0' : ''}${month}-${year}`;
+}
+
+
 const register = async (req, res) => {
     const { email, region, shift, password } = req.body;
 
@@ -49,16 +58,16 @@ const login = async (req, res) => {
             return res.status(406).json({ message: "Invalid Email Id or Password" });
         }
 
-        const currentLoginDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
+        const currentLoginDate = formattedTodaysDate(); // Get current date in YYYY-MM-DD format
         const existingAttendance = await attendancedetails.findOne({ email: email, loginDate: currentLoginDate });
 
         let attendanceId;
         if (!existingAttendance) {
-            const newAttendance = new attendancedetails({ email: email, loginDate: currentLoginDate, lastLoginedTime: new Date(), totalDays: 0 });
+            const newAttendance = new attendancedetails({ email: email, loginDate: currentLoginDate, lastLoginedTime: formattedTodaysDate(), totalDays: 0 });
             const savedAttendance = await newAttendance.save();
             attendanceId = savedAttendance._id;
         } else {
-            await attendancedetails.updateOne({ _id: existingAttendance._id }, { $set: { lastLoginedTime: new Date() } });
+            await attendancedetails.updateOne({ _id: existingAttendance._id }, { $set: { lastLoginedTime: formattedTodaysDate() } });
             attendanceId = existingAttendance._id;
         }
 
@@ -92,7 +101,7 @@ const logouti = async (req, res) => {
 
         await attendancedetails.updateOne(
             { _id: attendanceId },
-            { $set: { totalTimeSpent: formatTime(updatedTotalTimeSpent), lastLoginedTime: new Date(), totalDays: totalDays } }
+            { $set: { totalTimeSpent: formatTime(updatedTotalTimeSpent), lastLoginedTime: formattedTodaysDate(), totalDays: totalDays } }
         );
 
         // const result = await markAttendance(TodaysAttendance.email, updatedTotalTimeSpent);
